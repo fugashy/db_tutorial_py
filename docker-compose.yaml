@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10.5-alpine
+    container_name: test_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./db_data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_DB: "test"
+      POSTGRES_PASSWORD: "test"
+
+  notebook:
+    image: scipy-notebook-pg
+    container_name: notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./notebooks:/home/jovyan/work"
+    environment:
+      JUPYTER_TOKEN: jupyter
+      JUPYTER_ENABLE_LAB: 1
+    depends_on:
+      - db
+
+
